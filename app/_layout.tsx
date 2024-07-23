@@ -1,6 +1,5 @@
-import { Text, View } from 'react-native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Slot } from 'expo-router';
 
 
 export default function RootLayout() {
@@ -12,11 +11,5 @@ export default function RootLayout() {
     return null;
   }
 
-  return (
-    <View>
-      <Text>
-        Open up App.tsx to start working on your app!
-      </Text>
-    </View>
-  );
+  return <Slot />;
 }

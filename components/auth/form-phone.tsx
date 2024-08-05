@@ -6,10 +6,8 @@ import { useLoginContext } from "@/hooks/use-login-context";
 import { useClientContext } from "@/hooks/use-client-context";
 
 export function FormPhone() {
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
-
-  const { phone, updateFormItem, updateStep } = useLoginContext();
+  const { phone, updateFormItem, updateStep, changeLoading } = useLoginContext();
   const { callAPI } = useClientContext();
 
   const handleContinue = () => {
@@ -25,10 +23,10 @@ export function FormPhone() {
 
     Keyboard.dismiss();
 
-    setIsLoading(true);
+    changeLoading(true);
     setError(undefined);
 
-    callAPI(`/user/validate-phone/${phone}`, { delay: 1000 })
+    callAPI(`/user/validate-phone/${phone}`, { delay: 800 })
       .then((result) => {
         if (result.isSuccess !== 200) {
           setError(result.data?.message ?? 'Ocurrió un error al validar el número de celular');
@@ -38,7 +36,7 @@ export function FormPhone() {
         updateStep('pin');
       })
       .finally(() => {
-        setIsLoading(false);
+        changeLoading(false);
       });
   }
 
@@ -113,7 +111,6 @@ export function FormPhone() {
         )}
       </View>
       <Pressable
-        disabled={isLoading}
         style={({ pressed }) => ({
           width: '100%',
           padding: 16,
@@ -130,7 +127,7 @@ export function FormPhone() {
             fontWeight: 'bold',
           }}
         >
-          {isLoading ? 'Cargando...' : 'Continuar'}
+          Continuar
         </Text>
       </Pressable>
     </View>

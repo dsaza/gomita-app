@@ -9,19 +9,19 @@ export function FormPhone() {
   const { phone, updateFormItem, updateStep } = useLoginContext();
 
   const handleContinue = () => {
-    const formPhone = phone.trim();
-
-    if (formPhone.length !== 10) {
+    if (phone.length !== 10) {
       setError('El número de celular debe tener 10 dígitos');
       return;
     }
 
-    if (!formPhone.startsWith('30') && !formPhone.startsWith('31') && !formPhone.startsWith('32')) {
+    if (!phone.startsWith('30') && !phone.startsWith('31') && !phone.startsWith('32')) {
       setError('El número de celular es inválido');
       return;
     }
 
     setError(undefined);
+    Keyboard.dismiss();
+
     updateStep('pin');
   }
 
@@ -77,12 +77,9 @@ export function FormPhone() {
               borderWidth: 1,
               borderColor: error !== undefined ? COLORS.error : COLORS.white,
             }}
+            value={phone}
             onChangeText={(text) => {
               updateFormItem('phone', text);
-
-              if (text.length === 10) {
-                Keyboard.dismiss();
-              }
             }}
           />
         </View>

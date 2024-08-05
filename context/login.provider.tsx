@@ -5,6 +5,7 @@ import { ILoginContext, LoginContext } from "./login";
 
 export function LoginProvider ({ children }: React.PropsWithChildren) {
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [otp, setOtp] = useState('');
@@ -18,6 +19,10 @@ export function LoginProvider ({ children }: React.PropsWithChildren) {
 
   const updateStep: ILoginContext["updateStep"] = (step) => {
     setStep(step);
+  }
+
+  const changeLoading: ILoginContext["changeLoading"] = (value) => {
+    setIsLoading(value);
   }
 
   useEffect(() => {
@@ -38,16 +43,18 @@ export function LoginProvider ({ children }: React.PropsWithChildren) {
   return (
     <LoginContext.Provider
       value={{
+        isLoading,
         phone,
         pin,
         otp,
         step,
         updateFormItem,
         updateStep,
+        changeLoading,
       }}
     >
-      {!isLoadingData && children}
-      {isLoadingData && <GlobalLoader />}
+      {!isLoadingData && !isLoading && children}
+      {isLoadingData || isLoading && <GlobalLoader />}
     </LoginContext.Provider>
   );
 }

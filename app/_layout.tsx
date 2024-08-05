@@ -2,6 +2,7 @@ import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
 import { ScreenLayout } from '@/components/auth/screen-layout';
 import { GlobalLoader } from '@/components/loader';
+import { AuthProvider } from '@/context/auth.provider';
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -17,8 +18,8 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <AuthProvider>
       <Slot />
-    </>
+    </AuthProvider>
   );
 }

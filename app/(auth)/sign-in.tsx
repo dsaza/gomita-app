@@ -1,10 +1,11 @@
-import { Image, Text, View, ActivityIndicator } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { ScreenLayout } from '@/components/auth/screen-layout';
 import { COLORS } from '@/constants/colors';
 import { useKeyboard } from '@/hooks/use-keyboard';
 import { FormPhone } from '@/components/auth/form-phone';
 import { useFormLogin } from '@/hooks/use-form-login';
+import { GlobalLoader } from '@/components/loader';
 
 export default function SignIn () {
   const keyboard = useKeyboard();
@@ -59,17 +60,7 @@ export default function SignIn () {
           />
         </View>
       )}
-      {isLoadingData && (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <ActivityIndicator />
-        </View>
-      )}
+      {isLoadingData && <GlobalLoader />}
     </ScreenLayout>
   )
 }

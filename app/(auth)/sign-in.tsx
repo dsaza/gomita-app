@@ -3,13 +3,11 @@ import { Stack } from 'expo-router';
 import { ScreenLayout } from '@/components/auth/screen-layout';
 import { COLORS } from '@/constants/colors';
 import { useKeyboard } from '@/hooks/use-keyboard';
-import { FormPhone } from '@/components/auth/form-phone';
-import { useFormLogin } from '@/hooks/use-form-login';
-import { GlobalLoader } from '@/components/loader';
+import { LoginProvider } from '@/context/login.provider';
+import { AuthForms } from '@/components/auth/forms';
 
 export default function SignIn () {
   const keyboard = useKeyboard();
-  const { step, phone, isLoadingData, updateFormItem, updateStep } = useFormLogin();
 
   return (
     <ScreenLayout background='primary'>
@@ -18,7 +16,7 @@ export default function SignIn () {
           headerShown: false,
         }}
       />
-      {!isLoadingData && (
+      <LoginProvider>
         <View
           style={{
             flex: 1,
@@ -54,13 +52,9 @@ export default function SignIn () {
               Gomita
             </Text>
           </View>
-          <FormPhone
-            phone={phone}
-            updateFormItem={updateFormItem}
-          />
+          <AuthForms />
         </View>
-      )}
-      {isLoadingData && <GlobalLoader />}
+      </LoginProvider>
     </ScreenLayout>
   )
 }

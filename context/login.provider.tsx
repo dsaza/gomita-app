@@ -1,52 +1,53 @@
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GlobalLoader } from "@/components/loader";
+import { ILoginContext, LoginContext } from "./login";
 
-export interface FormLoginHook {
-  isLoadingData: boolean;
-  phone: string;
-  pin: string;
-  otp: string;
-  step: 'phone' | 'pin' | 'otp' | null;
-  updateFormItem: (key: 'phone' | 'pin' | 'otp', value: string) => void;
-  updateStep: (step: 'phone' | 'pin' | 'otp' | null) => void;
-}
-
-export function useFormLogin (): FormLoginHook {
+export function LoginProvider ({ children }: React.PropsWithChildren) {
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState<'phone' | 'pin' | 'otp' | null>(null);
 
-  const updateFormItem: FormLoginHook["updateFormItem"] = (key, value) => {
+  const updateFormItem: ILoginContext["updateFormItem"] = (key, value) => {
     key === 'phone' && setPhone(value);
     key === 'pin' && setPin(value);
     key === 'otp' && setOtp(value);
   }
 
-  const updateStep: FormLoginHook["updateStep"] = (step) => {
+  const updateStep: ILoginContext["updateStep"] = (step) => {
     setStep(step);
   }
-  
+
   useEffect(() => {
     AsyncStorage.getItem('phone')
       .then((value) => {
         if (value !== null) {
           setPhone(value);
+          setStep('pin');
+        } else {
+          setStep('phone');
         }
       })
       .finally(() => {
         setIsLoadingData(false);
       });
   }, []);
-  
-  return {
-    isLoadingData,
-    phone,
-    pin,
-    otp,
-    step,
-    updateFormItem,
-    updateStep,
-  };
+
+  return (
+    <LoginContext.Provider
+      value={{
+        phone,
+        pin,
+        otp,
+        step,
+        updateFormItem,
+        updateStep,
+      }}
+    >
+      {!isLoadingData && children}
+      {isLoadingData && <GlobalLoader />}
+    </LoginContext.Provider>
+  );
 }

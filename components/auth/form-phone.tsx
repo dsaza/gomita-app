@@ -2,15 +2,11 @@ import { useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { COLORS } from "@/constants/colors";
 import { getWelcomeMessage } from "@/lib/welcome";
-import { FormLoginHook } from "@/hooks/use-form-login";
+import { useLoginContext } from "@/hooks/use-login-context";
 
-interface FormPhoneProps {
-  phone: FormLoginHook["phone"];
-  updateFormItem: FormLoginHook["updateFormItem"];
-}
-
-export function FormPhone({ phone, updateFormItem }: FormPhoneProps) {
+export function FormPhone() {
   const [error, setError] = useState<string | undefined>(undefined);
+  const { phone, updateFormItem, updateStep } = useLoginContext();
 
   const handleContinue = () => {
     const formPhone = phone.trim();
@@ -26,6 +22,7 @@ export function FormPhone({ phone, updateFormItem }: FormPhoneProps) {
     }
 
     setError(undefined);
+    updateStep('pin');
   }
 
   return (

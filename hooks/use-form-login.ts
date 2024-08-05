@@ -12,7 +12,7 @@ export interface FormLoginHook {
 }
 
 export function useFormLogin (): FormLoginHook {
-  const [isLoadingData, setIsLoadingData] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(true);
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [otp, setOtp] = useState('');
@@ -29,12 +29,15 @@ export function useFormLogin (): FormLoginHook {
   }
   
   useEffect(() => {
-    AsyncStorage.getItem('phone').then((value) => {
-      if (value !== null) {
-        setPhone(value);
+    AsyncStorage.getItem('phone')
+      .then((value) => {
+        if (value !== null) {
+          setPhone(value);
+        }
+      })
+      .finally(() => {
         setIsLoadingData(false);
-      }
-    })
+      });
   }, []);
   
   return {

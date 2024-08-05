@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GlobalLoader } from "@/components/loader";
+import { COLORS } from "@/constants/colors";
 import { ILoginContext, LoginContext } from "./login";
 
 export function LoginProvider ({ children }: React.PropsWithChildren) {
@@ -53,8 +55,22 @@ export function LoginProvider ({ children }: React.PropsWithChildren) {
         changeLoading,
       }}
     >
-      {!isLoadingData && !isLoading && children}
-      {isLoadingData || isLoading && <GlobalLoader />}
+      {children}
+      {isLoadingData || isLoading && (
+        <View
+          style={{
+            position: 'absolute',
+            backgroundColor: COLORS.primary,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 10
+          }}
+        >
+          <GlobalLoader />
+        </View>
+      )}
     </LoginContext.Provider>
   );
 }

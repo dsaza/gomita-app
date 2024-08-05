@@ -15,6 +15,11 @@ export function ClientProvider({ children }: React.PropsWithChildren) {
   const callAPI: IClientContext["callAPI"] = useCallback(async (endpoint, init) => {
     try {
       const url = new URL(endpoint, apiURL);
+
+      if (init?.delay !== undefined) {
+        await new Promise((resolve) => setTimeout(resolve, init.delay));
+      }
+
       const response = await fetch(url.href, {
         ...init,
         headers: {
@@ -39,7 +44,7 @@ export function ClientProvider({ children }: React.PropsWithChildren) {
       };
     } catch (error) {
       return {
-        isSuccess: false,
+        isSuccess: 500,
       };
     }
   }, []);

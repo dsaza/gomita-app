@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 export interface IClientResponse {
-  isSuccess: number | boolean;
+  isSuccess: number;
   data?: {
     status: string;
     message: string;
@@ -11,6 +11,7 @@ export interface IClientResponse {
 
 export interface IClientPayload extends RequestInit {
   withAuthorization?: boolean;
+  delay?: number;
 }
 
 export interface IClientContext {

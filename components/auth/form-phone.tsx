@@ -3,10 +3,14 @@ import { Keyboard, Pressable, Text, TextInput, View } from "react-native";
 import { COLORS } from "@/constants/colors";
 import { getWelcomeMessage } from "@/lib/welcome";
 import { useLoginContext } from "@/hooks/use-login-context";
+import { useClientContext } from "@/hooks/use-client-context";
 
 export function FormPhone() {
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
+
   const { phone, updateFormItem, updateStep } = useLoginContext();
+  const { callAPI } = useClientContext();
 
   const handleContinue = () => {
     if (phone.length !== 10) {
@@ -19,10 +23,23 @@ export function FormPhone() {
       return;
     }
 
-    setError(undefined);
     Keyboard.dismiss();
 
-    updateStep('pin');
+    setIsLoading(true);
+    setError(undefined);
+
+    callAPI(`/user/validate-phone/${phone}`, { delay: 1000 })
+      .then((result) => {
+        if (result.isSuccess !== 200) {
+          setError('Ocurrió un error al validar el número de celular');
+          return;
+        }
+
+        updateStep('pin');
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   return (
@@ -96,6 +113,7 @@ export function FormPhone() {
         )}
       </View>
       <Pressable
+        disabled={isLoading}
         style={({ pressed }) => ({
           width: '100%',
           padding: 16,
@@ -112,7 +130,7 @@ export function FormPhone() {
             fontWeight: 'bold',
           }}
         >
-          Continuar
+          {isLoading ? 'Cargando...' : 'Continuar'}
         </Text>
       </Pressable>
     </View>

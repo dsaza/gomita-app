@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { NumberKeyBoard } from "./number-keyboard";
 import { useLoginContext } from "@/hooks/use-login-context";
@@ -32,10 +32,6 @@ export function FormPin () {
       });
   }
 
-  useEffect(() => {
-    console.log({error})
-  }, [error])
-
   return (
     <View
       style={{
@@ -53,6 +49,7 @@ export function FormPin () {
         error={error}
         onUpdate={(value) => {
           updateFormItem('pin', value);
+          setError(undefined);
         }}
         onFinished={handleFinish}
       />

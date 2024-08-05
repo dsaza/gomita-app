@@ -31,7 +31,7 @@ export function FormPhone() {
     callAPI(`/user/validate-phone/${phone}`, { delay: 1000 })
       .then((result) => {
         if (result.isSuccess !== 200) {
-          setError('Ocurrió un error al validar el número de celular');
+          setError(result.data?.message ?? 'Ocurrió un error al validar el número de celular');
           return;
         }
 

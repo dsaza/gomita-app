@@ -3,6 +3,7 @@ import { Slot } from 'expo-router';
 import { ScreenLayout } from '@/components/auth/screen-layout';
 import { GlobalLoader } from '@/components/loader';
 import { AuthProvider } from '@/context/auth.provider';
+import { ClientProvider } from '@/context/client.provider';
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -19,7 +20,9 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <Slot />
+      <ClientProvider>
+        <Slot />
+      </ClientProvider>
     </AuthProvider>
   );
 }

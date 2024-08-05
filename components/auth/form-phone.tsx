@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Keyboard, Pressable, Text, TextInput, View } from "react-native";
 import { COLORS } from "@/constants/colors";
 import { getWelcomeMessage } from "@/lib/welcome";
 import { useLoginContext } from "@/hooks/use-login-context";
@@ -79,6 +79,10 @@ export function FormPhone() {
             }}
             onChangeText={(text) => {
               updateFormItem('phone', text);
+
+              if (text.length === 10) {
+                Keyboard.dismiss();
+              }
             }}
           />
         </View>

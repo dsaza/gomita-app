@@ -21,7 +21,8 @@ export function ScreenLayout({ children, background = 'white' }: ScreenLayoutPro
         paddingLeft: 16,
         paddingRight: 16,
         paddingTop: insets.top,
-        paddingBottom: keyboard.isOpen ? keyboard.metrics?.height : insets.bottom
+        paddingBottom: keyboard.isOpen ? keyboard.metrics?.height : insets.bottom,
+        position: 'relative',
       }}
     >
       <StatusBar style={background === 'white' ? 'dark' : 'light'} />

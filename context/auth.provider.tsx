@@ -2,32 +2,48 @@ import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GlobalLoader } from "@/components/loader";
 import { ScreenLayout } from "@/components/auth/screen-layout";
-import { AuthContext, IAuthContext } from "./auth";
+import { AuthContext, IAuthContext, IAuthData, IToken, IUser } from "./auth";
 
 export function AuthProvider ({ children }: React.PropsWithChildren) {
+  const [user, setUser] = useState<IUser | null>(null);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [authToken, setAuthToken] = useState<string>();
+  const [authToken, setAuthToken] = useState<IToken | null>(null);
 
-  const logIn: IAuthContext["logIn"] = async (token) => {
-    await AsyncStorage.setItem("authToken", token);
-    setIsAuthenticated(true);
+  const logIn: IAuthContext["logIn"] = async (user, token) => {
+    const authData: IAuthData = { user, token };
+    await AsyncStorage.setItem("auth", JSON.stringify(authData));
+
+    setUser(user);
     setAuthToken(token);
+    setIsAuthenticated(true);
   }
 
   const logOut: IAuthContext["logOut"] = async () => {
-    await AsyncStorage.removeItem("authToken");
+    await AsyncStorage.removeItem("auth");
+
     setIsAuthenticated(false);
-    setAuthToken(undefined);
+    setAuthToken(null);
+    setUser(null);
   }
 
   useEffect(() => {
-    setIsLoadingData(false);
+    AsyncStorage.getItem("auth")
+      .then((authData) => {
+        if (authData) {
+          const { user, token } = JSON.parse(authData) as IAuthData;
+          setUser(user);
+          setAuthToken(token);
+          setIsAuthenticated(true);
+        }
+      })
+      .finally(() => setIsLoadingData(false));
   }, [])
   
   return (
     <AuthContext.Provider
       value={{
+        user,
         isAuthenticated,
         authToken,
         logIn,

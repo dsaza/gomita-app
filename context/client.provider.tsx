@@ -24,7 +24,7 @@ export function ClientProvider({ children }: React.PropsWithChildren) {
         ...init,
         headers: {
           ...init?.headers,
-          Authorization: init?.withAuthorization === true && authToken !== undefined ? `Bearer ${authToken}` : "",
+          Authorization: init?.withAuthorization === true && authToken !== null ? `Bearer ${authToken.value}` : "",
         },
       });
 

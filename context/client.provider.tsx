@@ -43,6 +43,7 @@ export function ClientProvider({ children }: React.PropsWithChildren) {
         data,
       };
     } catch (error) {
+      console.error(error);
       return {
         isSuccess: 500,
       };

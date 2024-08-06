@@ -26,9 +26,7 @@ export function FormPin () {
         tokenAccount: typeof authToken?.account === 'string' ? `Bearer ${authToken.account}` : undefined,
       })
     })
-      .then((result) => {
-        console.log(result);
-        
+      .then((result) => {        
         if (result.isSuccess !== 200) {
           updateFormItem('pin', '');
           setError(result.data?.message ?? 'No se pudo iniciar sesión');

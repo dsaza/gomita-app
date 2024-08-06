@@ -3,7 +3,7 @@ import { View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GlobalLoader } from "@/components/loader";
 import { COLORS } from "@/constants/colors";
-import { ILoginContext, LoginContext } from "./login";
+import { ILoginContext, IPreLoginData, LoginContext } from "./login";
 
 export function LoginProvider ({ children }: React.PropsWithChildren) {
   const [isLoadingData, setIsLoadingData] = useState(true);
@@ -11,12 +11,13 @@ export function LoginProvider ({ children }: React.PropsWithChildren) {
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [otp, setOtp] = useState('');
+  const [preLoginData, setPreLoginData] = useState<IPreLoginData | null>(null);
   const [step, setStep] = useState<'phone' | 'pin' | 'otp' | null>(null);
 
   const updateFormItem: ILoginContext["updateFormItem"] = (key, value) => {
-    key === 'phone' && setPhone(value);
-    key === 'pin' && setPin(value);
-    key === 'otp' && setOtp(value);
+    key === 'phone' && setPhone(value ?? '');
+    key === 'pin' && setPin(value ?? '');
+    key === 'otp' && setOtp(value ?? '');
   }
 
   const updateStep: ILoginContext["updateStep"] = (step) => {
@@ -25,6 +26,10 @@ export function LoginProvider ({ children }: React.PropsWithChildren) {
 
   const changeLoading: ILoginContext["changeLoading"] = (value) => {
     setIsLoading(value);
+  }
+
+  const updatePreLoginData: ILoginContext["updatePreLoginData"] = (data) => {
+    setPreLoginData(data);
   }
 
   useEffect(() => {
@@ -50,9 +55,11 @@ export function LoginProvider ({ children }: React.PropsWithChildren) {
         pin,
         otp,
         step,
+        preLoginData,
         updateFormItem,
         updateStep,
         changeLoading,
+        updatePreLoginData,
       }}
     >
       {children}

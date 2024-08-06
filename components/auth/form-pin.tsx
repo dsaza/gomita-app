@@ -4,10 +4,11 @@ import { NumberKeyBoard } from "./number-keyboard";
 import { useLoginContext } from "@/hooks/use-login-context";
 import { COLORS } from "@/constants/colors";
 import { useClientContext } from "@/hooks/use-client-context";
+import { IPreLoginData } from "@/context/login";
 
 export function FormPin () {
   const [error, setError] = useState<string | undefined>();
-  const { phone, pin, updateFormItem, changeLoading, updateStep } = useLoginContext();
+  const { phone, pin, updateFormItem, changeLoading, updateStep, updatePreLoginData } = useLoginContext();
   const { callAPI } = useClientContext();
 
   const handleFinish = (value: string) => {
@@ -25,6 +26,8 @@ export function FormPin () {
           return;
         }
 
+        const preLoginData = result.data?.data as IPreLoginData;
+        updatePreLoginData(preLoginData);
         updateStep('otp');
       })
       .finally(() => {

@@ -12,13 +12,13 @@ export interface IUser {
 }
 
 export interface IToken {
-  value: string;
-  refresh: string;
+  value?: string;
+  refresh?: string;
   account?: string;
 }
 
 export interface IAuthData {
-  user: IUser;
+  user: IUser | null;
   token: IToken;
 }
 
@@ -26,7 +26,7 @@ export interface IAuthContext {
   isAuthenticated: boolean;
   authToken: IToken | null;
   user: IUser | null;
-  logIn: (user: IUser, token: IToken) => Promise<void>;
+  logIn: (options: { user: IUser, token: IToken, phone: string }) => Promise<void>;
   logOut: () => Promise<void>;
 };
 
